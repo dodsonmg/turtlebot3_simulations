@@ -79,6 +79,9 @@ class Turtlebot3Fake
   ros::Publisher joint_states_pub_;
   ros::Publisher odom_pub_;
 
+  // DEMO ROS Topic Publisher
+  ros::Publisher test_pub_;
+
   // ROS Topic Subscribers
   ros::Subscriber cmd_vel_sub_;
 
