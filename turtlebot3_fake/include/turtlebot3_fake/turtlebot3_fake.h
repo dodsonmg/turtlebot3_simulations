@@ -24,6 +24,7 @@
 #include <ros/ros.h>
 #include <ros/time.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/String.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/Vector3.h>
@@ -80,6 +81,7 @@ class Turtlebot3Fake
   ros::Publisher odom_pub_;
 
   // DEMO ROS Topic Publisher
+  int count;
   ros::Publisher test_pub_;
 
   // ROS Topic Subscribers

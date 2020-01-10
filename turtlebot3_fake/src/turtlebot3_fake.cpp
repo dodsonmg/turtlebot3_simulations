@@ -97,6 +97,7 @@ bool Turtlebot3Fake::init()
   odom_pub_         = nh_.advertise<nav_msgs::Odometry>("odom", 100);
 
   // initialize DEMO publisher (based on tutorial at ros.org)
+  count             = 0;
   test_pub_         = nh_.advertise<std_msgs::String>("chatter", 100);
 
   // initialize subscribers
@@ -237,6 +238,19 @@ bool Turtlebot3Fake::update()
   updateTF(odom_tf);
   tf_broadcaster_.sendTransform(odom_tf);
 
+  // begin DEMO publisher snippet
+  std_msgs::String msg;
+
+  std::stringstream ss;
+  ss << "hello world " << count;
+  msg.data = ss.str();
+
+  ROS_INFO("%s", msg.data.c_str());
+
+  test_pub_.publish(msg);
+  ++count;
+  // end DEMO publisher snippet
+
   return true;
 }
 
@@ -252,21 +266,6 @@ int main(int argc, char* argv[])
 
   while (ros::ok())
   {
-    // begin DEMO publisher snippet
-    count = 0;
-
-    std_msgs::String msg;
-
-    std::stringstream ss;
-    ss << "hello world " << count;
-    msg.data = ss.str();
-
-    ROS_INFO("%s", msg.data.c_str());
-
-    test_pub_.publish(msg);
-    ++count;
-    // end DEMO publisher snippet
-
     tb3fake.update();
     ros::spinOnce();
     loop_rate.sleep();
