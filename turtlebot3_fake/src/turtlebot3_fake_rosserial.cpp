@@ -36,9 +36,6 @@ bool init()
 {
   // DEBUG_SERIAL.begin(57600);  // not sure how this is used
 
-  memcpy(&(odom.pose.covariance),pcov,sizeof(double)*36);
-  memcpy(&(odom.twist.covariance),pcov,sizeof(double)*36);
-
   // Initialize ROS node handle, advertise and subscribe the topics
   nh.initNode();
   nh.getHardware()->setBaud(115200);
@@ -122,6 +119,10 @@ void publishVersionInfoMsg(void)
 void initOdom(void)
 {
   init_encoder = true;
+
+  // moved from the original init function.  pcov is in the header file
+  memcpy(&(odom.pose.covariance),pcov,sizeof(double)*36);
+  memcpy(&(odom.twist.covariance),pcov,sizeof(double)*36);
 
   for (int index = 0; index < 3; index++)
   {
