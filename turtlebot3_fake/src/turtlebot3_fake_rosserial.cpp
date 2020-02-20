@@ -118,8 +118,6 @@ void publishVersionInfoMsg(void)
 *******************************************************************************/
 void initOdom(void)
 {
-  init_encoder = true;
-
   // moved from the original init function.  pcov is in the header file
   memcpy(&(odom.pose.covariance),pcov,sizeof(double)*36);
   memcpy(&(odom.twist.covariance),pcov,sizeof(double)*36);
