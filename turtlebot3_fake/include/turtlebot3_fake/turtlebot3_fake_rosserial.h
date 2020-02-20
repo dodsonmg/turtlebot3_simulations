@@ -150,8 +150,8 @@ ros::Subscriber<std_msgs::Empty> reset_sub("reset", resetCallback);
 /*******************************************************************************
 * Publisher
 *******************************************************************************/
-// ros::Publisher joint_states_pub_;
-// ros::Publisher odom_pub_;
+// ros::Publisher joint_states_pub;
+// ros::Publisher odom_pub;
 
 // Joint(Dynamixel) state of Turtlebot3
 /* from opencr */
@@ -171,7 +171,7 @@ ros::Publisher version_info_pub("firmware_version", &version_info_msg);
 /*******************************************************************************
 * Transform Broadcaster
 *******************************************************************************/
-// tf::TransformBroadcaster tf_broadcaster_;
+// tf::TransformBroadcaster tf_broadcaster;
 
 // TF of Turtlebot3
 /* from opencr */
@@ -181,26 +181,26 @@ tf::TransformBroadcaster tf_broadcaster;
 /*******************************************************************************
 * Simulation Parameters
 *******************************************************************************/
-double wheel_speed_cmd_[2];
-wheel_speed_cmd_[LEFT]        = 0.0;
-wheel_speed_cmd_[RIGHT]       = 0.0;
-double goal_linear_velocity_  = 0.0;
-double goal_angular_velocity_ = 0.0;
-double cmd_vel_timeout_       = 1.0;
+double wheel_speed_cmd[2];
+wheel_speed_cmd[LEFT]        = 0.0;
+wheel_speed_cmd[RIGHT]       = 0.0;
+double goal_linear_velocity  = 0.0;
+double goal_angular_velocity = 0.0;
+double cmd_vel_timeout       = 1.0;
 
-float  odom_pose_[3];
-float  odom_vel_[3];
+float  odom_pose[3];
+float  odom_vel[3];
 
 /*
 ???:  this doesn't appear to be used.  
 pcov was in the .cpp file, and I moved it below.
 */
-// double pose_cov_[36];
+// double pose_cov[36];
 
 /*
 ???:  why is this necessary?
 used to set node params, which i removed.
-push_back'ed into joint_states_.name in .cpp
+push_back'ed into joint_states.name in .cpp
 */
 std::string joint_states_name[2];
 
@@ -250,44 +250,44 @@ and it receives Twist& cmd_vel_msg in turtlebot3_core.
 
 //  private:
 // ROS NodeHandle
-// ros::NodeHandle nh_;
-// ros::NodeHandle nh_priv_;
+// ros::NodeHandle nh;
+// ros::NodeHandle nh_priv;
 
 // ROS Parameters
 // (TODO)
 
 // ROS Time
-// ros::Time last_cmd_vel_time_;
-// ros::Time prev_update_time_;
+// ros::Time last_cmd_vel_time;
+// ros::Time prev_update_time;
 
 // ROS Topic Publishers
-// ros::Publisher joint_states_pub_;
-// ros::Publisher odom_pub_;
+// ros::Publisher joint_states_pub;
+// ros::Publisher odom_pub;
 
 // ROS Topic Subscribers
-// ros::Subscriber cmd_vel_sub_;
+// ros::Subscriber cmd_vel_sub;
 
-// sensor_msgs::JointState joint_states_;
-// nav_msgs::Odometry odom_;
-// tf::TransformBroadcaster tf_broadcaster_;
+// sensor_msgs::JointState joint_states;
+// nav_msgs::Odometry odom;
+// tf::TransformBroadcaster tf_broadcaster;
 
-// double wheel_speed_cmd_[2];
-// double goal_linear_velocity_;
-// double goal_angular_velocity_;
-// double cmd_vel_timeout_;
+// double wheel_speed_cmd[2];
+// double goal_linear_velocity;
+// double goal_angular_velocity;
+// double cmd_vel_timeout;
 
-// float  odom_pose_[3];
-// float  odom_vel_[3];
-// double pose_cov_[36];
+// float  odom_pose[3];
+// float  odom_vel[3];
+// double pose_cov[36];
 
-// std::string joint_states_name_[2];
+// std::string joint_states_name[2];
 
-// double last_position_[2];
-// double last_velocity_[2];
+// double last_position[2];
+// double last_velocity[2];
 
-// double wheel_separation_;
-// double turning_radius_;
-// double robot_radius_;
+// double wheel_separation;
+// double turning_radius;
+// double robot_radius;
 
 // }
 
