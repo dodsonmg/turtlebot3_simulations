@@ -330,12 +330,12 @@ bool update()
   // odom
   updateOdometry(step_time);
   odom.header.stamp = time_now;
-  odom_pub.publish(odom);
+  odom_pub.publish(&odom);
 
   // joint_states
   updateJoint();
   joint_states.header.stamp = time_now;
-  joint_states_pub.publish(joint_states);
+  joint_states_pub.publish(&joint_states);
 
   // tf
   // geometry_msgs::TransformStamped odom_tf;  // moved to header file
