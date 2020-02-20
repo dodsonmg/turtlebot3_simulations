@@ -236,8 +236,8 @@ void initJointStates(void)
 *******************************************************************************/
 void updateJointStates(void)
 {
-  static float joint_states_pos[WHEEL_NUM] = {0.0, 0.0};
-  static float joint_states_vel[WHEEL_NUM] = {0.0, 0.0};
+  static double joint_states_pos[WHEEL_NUM] = {0.0, 0.0};
+  static double joint_states_vel[WHEEL_NUM] = {0.0, 0.0};
 
   joint_states_pos[LEFT]  = last_position[LEFT];
   joint_states_pos[RIGHT] = last_position[RIGHT];
