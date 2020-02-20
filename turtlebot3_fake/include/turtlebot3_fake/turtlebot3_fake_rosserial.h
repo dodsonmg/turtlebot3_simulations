@@ -48,6 +48,8 @@ commenting it out until we decide we need it. */
 #include <std_msgs/Int32.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/JointState.h>
+// #include <sensor_msgs/BatteryState.h>
+// #include <sensor_msgs/MagneticField.h>
 #include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/Twist.h>
 #include <tf/tf.h>
@@ -55,6 +57,19 @@ commenting it out until we decide we need it. */
 #include <nav_msgs/Odometry.h>
 
 #include <turtlebot3_msgs/SensorState.h>
+#include <turtlebot3_msgs/Sound.h>
+#include <turtlebot3_msgs/VersionInfo.h>
+
+/* from opencr, TurtleBot3.h includes several other header files that define:
+turtlebot3_motor_driver.h
+turtlebot3_sensor.h
+turtlebot3_controller.h
+turtlebot3_diagnosis.h */
+
+// #include <TurtleBot3.h>
+
+// #include "turtlebot3_burger.h"  // from opencr.  unnecessary because all these things are defined in this file
+
 
 /* not sure what this is doing in the original file from
 turtlebot3_simulations repo.  seems to be self-referential.
