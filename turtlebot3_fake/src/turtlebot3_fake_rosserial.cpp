@@ -193,7 +193,7 @@ bool updateOdometry(ros::Duration diff_time)
   odom.pose.pose.position.x = odom_pose[0];
   odom.pose.pose.position.y = odom_pose[1];
   odom.pose.pose.position.z = 0;
-  odom.pose.pose.orientation = tf::createQuaternionMsgFromYaw(odom_pose[2]);
+  odom.pose.pose.orientation = tf::createQuaternionFromYaw(odom_pose[2]);
 
   // We should update the twist of the odometry
   odom.twist.twist.linear.x  = odom_vel[0];
