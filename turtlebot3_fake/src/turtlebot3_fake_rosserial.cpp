@@ -144,7 +144,7 @@ void initOdom(void)
 /*******************************************************************************
 * Calculate the odometry
 *******************************************************************************/
-bool updateOdometry(ros::Time diff_time)
+bool updateOdometry(ros::Duration diff_time)
 {
   double wheel_l, wheel_r; // rotation value of wheel [rad]
   double delta_s, delta_theta;
@@ -317,7 +317,11 @@ ros::Time addMicros(ros::Time & t, uint32_t _micros)
 bool update()
 {
   ros::Time time_now = rosNow();
-  ros::Time step_time = time_now - prev_update_time;
+
+  // this is a bit odd, but in rosserial Time and Duration don't have a - operator
+  // so i have to convert a Time to seconds (a double), subtract, then convert to a Duration
+  ros::Duration step_time;
+  step_time.fromSec(time_now.toSec() - prev_update_time.toSec());
   prev_update_time = time_now;
 
   // zero-ing after timeout
