@@ -93,8 +93,8 @@ void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
   goal_linear_velocity  = cmd_vel_msg.linear.x;
   goal_angular_velocity = cmd_vel_msg.angular.z;
 
-  wheel_speed_cmd[LEFT]  = goal_linear_velocity - (goal_angular_velocity * wheel_seperation / 2);
-  wheel_speed_cmd[RIGHT] = goal_linear_velocity + (goal_angular_velocity * wheel_seperation / 2);
+  wheel_speed_cmd[LEFT]  = goal_linear_velocity - (goal_angular_velocity * wheel_separation / 2);
+  wheel_speed_cmd[RIGHT] = goal_linear_velocity + (goal_angular_velocity * wheel_separation / 2);
 }
 
 /*******************************************************************************
@@ -180,7 +180,7 @@ bool updateOdometry(ros::Duration diff_time)
   last_position[RIGHT] += wheel_r;
 
   delta_s     = WHEEL_RADIUS * (wheel_r + wheel_l) / 2.0;
-  delta_theta = WHEEL_RADIUS * (wheel_r - wheel_l) / wheel_seperation;
+  delta_theta = WHEEL_RADIUS * (wheel_r - wheel_l) / wheel_separation;
 
   // compute odometric pose
   odom_pose[0] += delta_s * cos(odom_pose[2] + (delta_theta / 2.0));
