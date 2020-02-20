@@ -116,7 +116,7 @@ void initJointStates(void);  // copied from opencr
 
 bool updateOdometry(ros::Duration diff_time);  // arguments are void in opencr
 void updateTF(geometry_msgs::TransformStamped& odom_tf);
-void updateJoint(void);
+void updateJointStates(void);
 
 // void resetCallback(const std_msgs::Empty& reset_msg);  // copied from opencr
 
