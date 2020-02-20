@@ -37,7 +37,7 @@ bool init()
   // DEBUG_SERIAL.begin(57600);  // not sure how this is used
 
   // Initialize ROS node handle, advertise and subscribe the topics
-  nh.initNode();
+  nh.initNode("128.232.65.230");
   nh.getHardware()->setBaud(115200);
 
   nh.subscribe(cmd_vel_sub);
