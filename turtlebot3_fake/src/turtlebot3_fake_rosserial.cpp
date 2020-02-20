@@ -223,12 +223,30 @@ void initJointStates(void)
 /*******************************************************************************
 * Calculate the joint states
 *******************************************************************************/
-void updateJoint(void)
+// void updateJoint(void)
+// {
+//   joint_states.position[LEFT]  = last_position[LEFT];
+//   joint_states.position[RIGHT] = last_position[RIGHT];
+//   joint_states.velocity[LEFT]  = last_velocity[LEFT];
+//   joint_states.velocity[RIGHT] = last_velocity[RIGHT];
+// }
+
+/*******************************************************************************
+* Update the joint states 
+*******************************************************************************/
+void updateJointStates(void)
 {
-  joint_states.position[LEFT]  = last_position[LEFT];
-  joint_states.position[RIGHT] = last_position[RIGHT];
-  joint_states.velocity[LEFT]  = last_velocity[LEFT];
-  joint_states.velocity[RIGHT] = last_velocity[RIGHT];
+  static float joint_states_pos[WHEEL_NUM] = {0.0, 0.0};
+  static float joint_states_vel[WHEEL_NUM] = {0.0, 0.0};
+
+  joint_states_pos[LEFT]  = last_position[LEFT];
+  joint_states_pos[RIGHT] = last_position[RIGHT];
+
+  joint_states_vel[LEFT]  = last_velocity[LEFT];
+  joint_states_vel[RIGHT] = last_velocity[RIGHT];
+
+  joint_states.position = joint_states_pos;
+  joint_states.velocity = joint_states_vel;
 }
 
 /*******************************************************************************
@@ -337,7 +355,7 @@ bool update()
   odom_pub.publish(&odom);
 
   // joint_states
-  updateJoint();
+  updateJointStates();
   joint_states.header.stamp = time_now;
   joint_states_pub.publish(&joint_states);
 
