@@ -82,6 +82,7 @@ leaving it here for now. */
 
 #define WHEEL_RADIUS                    0.033     // meter
 
+#define WHEEL_NUM                       2
 #define LEFT                            0
 #define RIGHT                           1
 
@@ -181,9 +182,7 @@ tf::TransformBroadcaster tf_broadcaster;
 /*******************************************************************************
 * Simulation Parameters
 *******************************************************************************/
-double wheel_speed_cmd[2];
-wheel_speed_cmd[LEFT]        = 0.0;
-wheel_speed_cmd[RIGHT]       = 0.0;
+double wheel_speed_cmd[WHEEL_NUM] = {0.0, 0.0};
 double goal_linear_velocity  = 0.0;
 double goal_angular_velocity = 0.0;
 double cmd_vel_timeout       = 1.0;
@@ -204,12 +203,8 @@ push_back'ed into joint_states.name in .cpp
 */
 std::string joint_states_name[2];
 
-double last_position[2];
-last_position[LEFT]           = 0.0;
-last_position[RIGHT]          = 0.0;
-double last_velocity[2];
-last_velocity[LEFT]           = 0.0;
-last_velocity[RIGHT]          = 0.0;
+double last_position[WHEEL_NUM] = {0.0, 0.0};
+double last_velocity[WHEEL_NUM] = {0.0, 0.0};
 
 // assume TurtleBot3 Burger
 double wheel_separation       = 0.287;
@@ -239,56 +234,5 @@ arguments, presumably because the rosserial use of a function is different.
 E.g., commandVelocityCallback receives TwistConstPtr cmd_vel_msg in turtlebot3_fake
 and it receives Twist& cmd_vel_msg in turtlebot3_core.
 */
-
-// class Turtlebot3Fake
-// {
-//  public:
-//   Turtlebot3Fake();
-//   ~Turtlebot3Fake();
-//   bool init();
-//   bool update();
-
-//  private:
-// ROS NodeHandle
-// ros::NodeHandle nh;
-// ros::NodeHandle nh_priv;
-
-// ROS Parameters
-// (TODO)
-
-// ROS Time
-// ros::Time last_cmd_vel_time;
-// ros::Time prev_update_time;
-
-// ROS Topic Publishers
-// ros::Publisher joint_states_pub;
-// ros::Publisher odom_pub;
-
-// ROS Topic Subscribers
-// ros::Subscriber cmd_vel_sub;
-
-// sensor_msgs::JointState joint_states;
-// nav_msgs::Odometry odom;
-// tf::TransformBroadcaster tf_broadcaster;
-
-// double wheel_speed_cmd[2];
-// double goal_linear_velocity;
-// double goal_angular_velocity;
-// double cmd_vel_timeout;
-
-// float  odom_pose[3];
-// float  odom_vel[3];
-// double pose_cov[36];
-
-// std::string joint_states_name[2];
-
-// double last_position[2];
-// double last_velocity[2];
-
-// double wheel_separation;
-// double turning_radius;
-// double robot_radius;
-
-// }
 
 #endif // TURTLEBOT3_FAKE_ROSSERIAL_H_
