@@ -352,19 +352,21 @@ bool update()
 *******************************************************************************/
 int main(int argc, char* argv[])
 {
+
+  int count = 0;
   // ros::init(argc, argv, "turtlebot3_fake_node");
   // Turtlebot3Fake tb3fake;
   init();
 
-  ros::Rate loop_rate(30);
-
-  while (ros::ok())
+  while (1)
   {
     // tb3fake.update();
     update();
     // ros::spinOnce();
     nh.spinOnce();  // from opencr
-    loop_rate.sleep();
+    printf("in the loop [%d]\n", count);
+    count++;
+    sleep(1);
   }
 
   return 0;
