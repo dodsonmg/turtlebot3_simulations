@@ -38,7 +38,7 @@ bool init()
 
   // Initialize ROS node handle, advertise and subscribe the topics
   nh.initNode("128.232.65.230");
-  nh.getHardware()->setBaud(115200);
+//   nh.getHardware()->setBaud(115200);
 
   nh.subscribe(cmd_vel_sub);
   // nh.subscribe(sound_sub);
