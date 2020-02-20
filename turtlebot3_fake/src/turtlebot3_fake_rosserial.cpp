@@ -211,7 +211,7 @@ void initJointStates(void)
 {
   static char *joint_states_name[] = {(char*)"wheel_left_joint", (char*)"wheel_right_joint"};
 
-  joint_states.header.frame_id = joint_state_header_frame_id;
+//   joint_states.header.frame_id = joint_state_header_frame_id;  // opencr.  this never gets set
   joint_states.name            = joint_states_name;
 
   joint_states.name_length     = WHEEL_NUM;
@@ -254,9 +254,9 @@ void sendLogMsg(void)
   static bool log_flag = false;
   char log_msg[100];  
 
-  String name             = NAME;
-  String firmware_version = FIRMWARE_VER;
-  String bringup_log      = "This core(v" + firmware_version + ") is compatible with TB3 " + name;
+  std::string name             = NAME;
+  std::string firmware_version = FIRMWARE_VER;
+  std::string bringup_log      = "This core(v" + firmware_version + ") is compatible with TB3 " + name;
    
   const char* init_log_data = bringup_log.c_str();
 
