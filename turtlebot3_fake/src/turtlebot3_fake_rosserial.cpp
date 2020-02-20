@@ -86,12 +86,12 @@ bool init()
 /*******************************************************************************
 * Callback function for cmd_vel msg
 *******************************************************************************/
-void commandVelocityCallback(const geometry_msgs::TwistConstPtr cmd_vel_msg)
+void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
   last_cmd_vel_time = ros::Time::now();
 
-  goal_linear_velocity  = cmd_vel_msg->linear.x;
-  goal_angular_velocity = cmd_vel_msg->angular.z;
+  goal_linear_velocity  = cmd_vel_msg.linear.x;
+  goal_angular_velocity = cmd_vel_msg.angular.z;
 
   wheel_speed_cmd[LEFT]  = goal_linear_velocity - (goal_angular_velocity * wheel_seperation / 2);
   wheel_speed_cmd[RIGHT] = goal_linear_velocity + (goal_angular_velocity * wheel_seperation / 2);
