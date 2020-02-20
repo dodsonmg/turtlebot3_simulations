@@ -23,9 +23,8 @@
  * - remove all the Turtlebot3Fake:: scoping
 *******************************************************************************/
 
-
 // #include <turtlebot3_fake/turtlebot3_fake.h>
-#include "turtlebot3_fake.h"
+#include "turtlebot3_fake_rosserial.h"
 
 /*******************************************************************************
 * [New] Init function
