@@ -110,19 +110,19 @@ ros::Time addMicros(ros::Time & t, uint32_t _micros); // from opencr // deprecat
 /*******************************************************************************
 * ROS NodeHandle
 *******************************************************************************/
-ros::NodeHandle nh_;
-ros::NodeHandle nh_priv_;
+ros::NodeHandle nh;
+ros::NodeHandle nh_priv;
 
 /*******************************************************************************
 * ROS Time
 *******************************************************************************/
-ros::Time last_cmd_vel_time_;
-ros::Time prev_update_time_;
+ros::Time last_cmd_vel_time;
+ros::Time prev_update_time;
 
 /*******************************************************************************
 * Subscriber
 *******************************************************************************/
-// ros::Subscriber cmd_vel_sub_;
+// ros::Subscriber cmd_vel_sub;
 
 /* from opencr */
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", commandVelocityCallback);
@@ -138,18 +138,18 @@ ros::Subscriber<std_msgs::Empty> reset_sub("reset", resetCallback);
 
 // Joint(Dynamixel) state of Turtlebot3
 /* from opencr */
-sensor_msgs::JointState joint_states_;
-ros::Publisher joint_states_pub("joint_states", &joint_states_);
+sensor_msgs::JointState joint_states;
+ros::Publisher joint_states_pub("joint_states", &joint_states);
 
 // Odometry of Turtlebot3
 /* from opencr */
-nav_msgs::Odometry odom_;
-ros::Publisher odom_pub("odom", &odom_);
+nav_msgs::Odometry odom;
+ros::Publisher odom_pub("odom", &odom);
 
 // Version information of Turtlebot3
 /* from opencr */
-turtlebot3_msgs::VersionInfo version_info_msg_;
-ros::Publisher version_info_pub("firmware_version", &version_info_msg_);
+turtlebot3_msgs::VersionInfo version_info_msg;
+ros::Publisher version_info_pub("firmware_version", &version_info_msg);
 
 /*******************************************************************************
 * Transform Broadcaster
@@ -185,19 +185,19 @@ pcov was in the .cpp file, and I moved it below.
 used to set node params, which i removed.
 push_back'ed into joint_states_.name in .cpp
 */
-std::string joint_states_name_[2];
+std::string joint_states_name[2];
 
-double last_position_[2];
-last_position_[LEFT]          = 0.0;
-last_position_[RIGHT]         = 0.0;
-double last_velocity_[2];
-last_velocity_[LEFT]          = 0.0;
-last_velocity_[RIGHT]         = 0.0;
+double last_position[2];
+last_position[LEFT]           = 0.0;
+last_position[RIGHT]          = 0.0;
+double last_velocity[2];
+last_velocity[LEFT]           = 0.0;
+last_velocity[RIGHT]          = 0.0;
 
 // assume TurtleBot3 Burger
-double wheel_separation_      = 0.287;
-double turning_radius_        = 0.1435;
-double robot_radius_          = 0.220;
+double wheel_separation       = 0.287;
+double turning_radius         = 0.1435;
+double robot_radius           = 0.220;
 
 /*
 ???:  this is not performed in opencr
@@ -208,15 +208,15 @@ double pcov[36] = { 0.1,   0,   0,   0,   0, 0,
                       0,   0,   0, 1e6,   0, 0,
                       0,   0,   0,   0, 1e6, 0,
                       0,   0,   0,   0,   0, 0.2};
-memcpy(&(odom_.pose.covariance),pcov,sizeof(double)*36);
-memcpy(&(odom_.twist.covariance),pcov,sizeof(double)*36);
+memcpy(&(odom.pose.covariance),pcov,sizeof(double)*36);
+memcpy(&(odom.twist.covariance),pcov,sizeof(double)*36);
 
 /* The goal was to take this simulation (turtlebot3_fake) and map as much of the
 opencr code (turtlebot3_core) to the header and cpp files so it can be compiled
-independently of the rest of the ROS libraries.
+using rosserial.
 
 As a result, I removed the class definition and tried to make the file structure
-match that of turtlebot3_core.h.  This included a few instances of changing
+match that of opencr turtlebot3_core.h.  This included a few instances of changing
 arguments, presumably because the rosserial use of a function is different.
 
 E.g., commandVelocityCallback receives TwistConstPtr cmd_vel_msg in turtlebot3_fake
