@@ -118,7 +118,7 @@ bool updateOdometry(ros::Duration diff_time);  // arguments are void in opencr
 void updateTF(geometry_msgs::TransformStamped& odom_tf);
 void updateJoint(void);
 
-void resetCallback(const std_msgs::Empty& reset_msg);  // copied from opencr
+// void resetCallback(const std_msgs::Empty& reset_msg);  // copied from opencr
 
 void publishVersionInfoMsg(void);  // copied from opencr
 
@@ -160,7 +160,7 @@ char joint_state_header_frame_id[30];
 ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", commandVelocityCallback);
 
 /* from opencr */
-ros::Subscriber<std_msgs::Empty> reset_sub("reset", resetCallback);
+// ros::Subscriber<std_msgs::Empty> reset_sub("reset", resetCallback);
 
 /*******************************************************************************
 * Publisher

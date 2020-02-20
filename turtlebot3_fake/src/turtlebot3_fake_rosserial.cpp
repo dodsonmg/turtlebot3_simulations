@@ -43,7 +43,7 @@ bool init()
   nh.subscribe(cmd_vel_sub);
   // nh.subscribe(sound_sub);
   // nh.subscribe(motor_power_sub);
-  nh.subscribe(reset_sub);
+//   nh.subscribe(reset_sub);
 
   // nh.advertise(sensor_state_pub);  
   nh.advertise(version_info_pub);
@@ -88,7 +88,7 @@ bool init()
 *******************************************************************************/
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
-  last_cmd_vel_time = ros::Time::now();
+  last_cmd_vel_time = rosNow();
 
   goal_linear_velocity  = cmd_vel_msg.linear.x;
   goal_angular_velocity = cmd_vel_msg.angular.z;
