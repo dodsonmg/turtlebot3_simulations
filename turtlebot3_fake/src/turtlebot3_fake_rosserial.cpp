@@ -144,7 +144,7 @@ void initOdom(void)
 /*******************************************************************************
 * Calculate the odometry
 *******************************************************************************/
-bool updateOdometry(ros::Duration diff_time)
+bool updateOdometry(ros::Time diff_time)
 {
   double wheel_l, wheel_r; // rotation value of wheel [rad]
   double delta_s, delta_theta;
@@ -317,7 +317,7 @@ ros::Time addMicros(ros::Time & t, uint32_t _micros)
 bool update()
 {
   ros::Time time_now = rosNow();
-  ros::Duration step_time = time_now - prev_update_time;
+  ros::Time step_time = time_now - prev_update_time;
   prev_update_time = time_now;
 
   // zero-ing after timeout
