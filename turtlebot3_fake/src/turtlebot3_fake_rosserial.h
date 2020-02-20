@@ -43,6 +43,8 @@ commenting it out until we decide we need it. */
 
 /* all of these are included in the opencr repo */
 #include <ros/time.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Empty.h>
 #include <std_msgs/Int32.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/JointState.h>
