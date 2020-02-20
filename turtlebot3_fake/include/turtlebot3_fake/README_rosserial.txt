@@ -1,1 +1,0 @@
-This is a port of the turtlebot3_fake simulation package to rosserial.
