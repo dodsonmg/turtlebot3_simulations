@@ -213,6 +213,8 @@ double robot_radius           = 0.220;
 
 /*
 ???:  this is not performed in opencr
+
+moved the memcpy lines to the .cpp file
 */
 double pcov[36] = { 0.1,   0,   0,   0,   0, 0,
                       0, 0.1,   0,   0,   0, 0,
@@ -220,8 +222,6 @@ double pcov[36] = { 0.1,   0,   0,   0,   0, 0,
                       0,   0,   0, 1e6,   0, 0,
                       0,   0,   0,   0, 1e6, 0,
                       0,   0,   0,   0,   0, 0.2};
-memcpy(&(odom.pose.covariance),pcov,sizeof(double)*36);
-memcpy(&(odom.twist.covariance),pcov,sizeof(double)*36);
 
 /* The goal was to take this simulation (turtlebot3_fake) and map as much of the
 opencr code (turtlebot3_core) to the header and cpp files so it can be compiled
