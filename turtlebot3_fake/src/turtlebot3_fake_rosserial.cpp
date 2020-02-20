@@ -325,7 +325,7 @@ bool update()
   prev_update_time = time_now;
 
   // zero-ing after timeout
-  if((time_now - last_cmd_vel_time).toSec() > cmd_vel_timeout)
+  if((time_now.toSec() - last_cmd_vel_time.toSec()) > cmd_vel_timeout)
   {
     wheel_speed_cmd[LEFT]  = 0.0;
     wheel_speed_cmd[RIGHT] = 0.0;
