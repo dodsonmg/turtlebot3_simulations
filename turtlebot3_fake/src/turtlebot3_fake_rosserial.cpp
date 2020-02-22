@@ -88,6 +88,7 @@ bool init()
 *******************************************************************************/
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
+  printf("In commandVelocityCallback\n");
   last_cmd_vel_time = rosNow();
 
   goal_linear_velocity  = cmd_vel_msg.linear.x;
@@ -217,7 +218,7 @@ void initJointStates(void)
   joint_states.name_length     = WHEEL_NUM;
   joint_states.position_length = WHEEL_NUM;
   joint_states.velocity_length = WHEEL_NUM;
-  joint_states.effort_length   = WHEEL_NUM;
+  joint_states.effort_length   = 0;  // possibly used by opencr? set to 0 or else serialisation crashes
 }
 
 /*******************************************************************************
@@ -376,19 +377,19 @@ int main(int argc, char* argv[])
 {
 
   int count = 0;
+  int spin_result;
   // ros::init(argc, argv, "turtlebot3_fake_node");
   // Turtlebot3Fake tb3fake;
   init();
 
   while (1)
   {
-    // tb3fake.update();
     update();
-    // ros::spinOnce();
-    nh.spinOnce();  // from opencr
-    printf("in the loop [%d]\n", count);
+    spin_result=nh.spinOnce();  // from opencr
+
     count++;
-    sleep(1);
+    // sleep(1./30.);  // original turtlebot sim has an operating frequency of 30
+    sleep(loop_rate);
   }
 
   return 0;

@@ -199,7 +199,9 @@ tf::TransformBroadcaster tf_broadcaster;
 double wheel_speed_cmd[WHEEL_NUM] = {0.0, 0.0};
 double goal_linear_velocity  = 0.0;
 double goal_angular_velocity = 0.0;
-double cmd_vel_timeout       = 1.0;
+
+double loop_rate             = 1.0;     // for turtlebot3 sim, this is originally 30Hz (1./30.)
+double cmd_vel_timeout       = 10.0;    // for turtlebot3 sim, this is originally 1.0
 
 float  odom_pose[3];
 float  odom_vel[3];
