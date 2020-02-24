@@ -1,9 +1,14 @@
 #!/bin/bash
 
-TARGET=$1
+if [ "$#" -ne 1 ]; then
+    echo "Default to building for ubuntu"
+	TARGET=ubuntu
+else
+	TARGET=$1
+fi
 
 IN=./turtlebot3_fake/src/turtlebot3_fake_rosserial.cpp
-OUT=turtlebot3_fake_rosserial
+OUT=turtlebot3_fake_rosserial_$TARGET
 
 if [[ "$TARGET" == "ubuntu" ]]; then
 	g++ $IN -o $OUT \
