@@ -191,6 +191,10 @@ bool updateOdometry(ros::Duration diff_time)
   odom_vel[1] = 0.0;
   odom_vel[2] = delta_theta / diff_time.toSec(); // w
 
+  // i think these are necessary for robot_state_publisher and rviz
+  odom.header.frame_id = odom_header_frame_id;
+  odom.child_frame_id  = odom_child_frame_id;
+
   odom.pose.pose.position.x = odom_pose[0];
   odom.pose.pose.position.y = odom_pose[1];
   odom.pose.pose.position.z = 0;
@@ -222,17 +226,6 @@ void initJointStates(void)
 }
 
 /*******************************************************************************
-* Calculate the joint states
-*******************************************************************************/
-// void updateJoint(void)
-// {
-//   joint_states.position[LEFT]  = last_position[LEFT];
-//   joint_states.position[RIGHT] = last_position[RIGHT];
-//   joint_states.velocity[LEFT]  = last_velocity[LEFT];
-//   joint_states.velocity[RIGHT] = last_velocity[RIGHT];
-// }
-
-/*******************************************************************************
 * Update the joint states 
 *******************************************************************************/
 void updateJointStates(void)
@@ -248,6 +241,67 @@ void updateJointStates(void)
 
   joint_states.position = joint_states_pos;
   joint_states.velocity = joint_states_vel;
+}
+
+/*******************************************************************************
+* Update TF Prefix
+*******************************************************************************/
+void updateTFPrefix(bool isConnected)
+{
+  static bool isChecked = false;
+  char log_msg[50];
+
+  if (isConnected)
+  {
+    if (isChecked == false)
+    {
+      nh.getParam("~tf_prefix", &get_tf_prefix);
+
+      if (!strcmp(get_tf_prefix, ""))
+      {
+        sprintf(odom_header_frame_id, "odom");
+        sprintf(odom_child_frame_id, "base_footprint");  
+
+        // sprintf(imu_frame_id, "imu_link");
+        // sprintf(mag_frame_id, "mag_link");
+        sprintf(joint_state_header_frame_id, "base_link");
+      }
+      else
+      {
+        strcpy(odom_header_frame_id, get_tf_prefix);
+        strcpy(odom_child_frame_id, get_tf_prefix);
+
+        // strcpy(imu_frame_id, get_tf_prefix);
+        // strcpy(mag_frame_id, get_tf_prefix);
+        strcpy(joint_state_header_frame_id, get_tf_prefix);
+
+        strcat(odom_header_frame_id, "/odom");
+        strcat(odom_child_frame_id, "/base_footprint");
+
+        // strcat(imu_frame_id, "/imu_link");
+        // strcat(mag_frame_id, "/mag_link");
+        strcat(joint_state_header_frame_id, "/base_link");
+      }
+
+      sprintf(log_msg, "Setup TF on Odometry [%s]", odom_header_frame_id);
+      nh.loginfo(log_msg); 
+
+      // sprintf(log_msg, "Setup TF on IMU [%s]", imu_frame_id);
+      // nh.loginfo(log_msg); 
+
+      // sprintf(log_msg, "Setup TF on MagneticField [%s]", mag_frame_id);
+      // nh.loginfo(log_msg); 
+
+      sprintf(log_msg, "Setup TF on JointState [%s]", joint_state_header_frame_id);
+      nh.loginfo(log_msg); 
+
+      isChecked = true;
+    }
+  }
+  else
+  {
+    isChecked = false;
+  }
 }
 
 /*******************************************************************************
@@ -336,6 +390,9 @@ ros::Time addMicros(ros::Time & t, uint32_t _micros)
 bool update()
 {
   ros::Time time_now = rosNow();
+
+  // i don't really understand what this is for, but seems necessary for robot_state_publisher and rviz
+  updateTFPrefix(nh.connected());
 
   // this is a bit odd, but in rosserial Time and Duration don't have a - operator
   // so i have to convert a Time to seconds (a double), subtract, then convert to a Duration
