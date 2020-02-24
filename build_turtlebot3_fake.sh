@@ -23,6 +23,8 @@ elif [[ "$TARGET" == "cheri" ]]; then
 		-I./turtlebot3_fake/include/turtlebot3_fake \
 		--sysroot=$HOME/cheri/output/sdk/sysroot128 \
 		-B$HOME/cheri/output/sdk
+	
+	cp $OUT $HOME/cheri/output/rootfs128/xfer
 fi
 
 
