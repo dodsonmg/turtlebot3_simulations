@@ -8,7 +8,7 @@ else
 fi
 
 IN=./turtlebot3_rosserial/src/turtlebot3_rosserial.cpp
-OUT=turtlebot3_fake_rosserial_$TARGET
+OUT=turtlebot3_rosserial_$TARGET
 
 if [[ "$TARGET" == "ubuntu" ]]; then
 	g++ $IN -o $OUT \

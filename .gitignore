@@ -1,3 +1,3 @@
 # don't include the executables in the repo
-turtlebot3_fake_rosserial_cheri
-turtlebot3_fake_rosserial_ubuntu
+turtlebot3_rosserial_cheri
+turtlebot3_rosserial_ubuntu
