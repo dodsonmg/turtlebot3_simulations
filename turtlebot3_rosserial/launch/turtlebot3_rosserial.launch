@@ -1,0 +1,23 @@
+<launch>
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]" />
+
+  <arg name="multi_robot_name" default=""/>
+
+  <param name="tb3_model" value="burger" />
+
+  <node pkg="rosserial_python" type="serial_node.py" name="rosserial_python" output="screen">
+    <param name="port" value="tcp" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+
+  <!-- commented out because rviz over ssh doesn't work very well -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_fake)/rviz/turtlebot3_fake.rviz"/> -->
+</launch>
