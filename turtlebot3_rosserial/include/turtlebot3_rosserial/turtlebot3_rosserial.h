@@ -201,7 +201,7 @@ double wheel_speed_cmd[WHEEL_NUM] = {0.0, 0.0};
 double goal_linear_velocity  = 0.0;
 double goal_angular_velocity = 0.0;
 
-double loop_rate             = 1./10.;     // for turtlebot3 sim, this is originally 30Hz (1./30.)
+double loop_rate             = 1.;     // for turtlebot3 sim, this is originally 30Hz (1./30.)
 double cmd_vel_timeout       = 10.0;    // for turtlebot3 sim, this is originally 1.0
 
 float  odom_pose[3];

@@ -19,5 +19,5 @@
   </node>
 
   <!-- using a relative reference for rviz.  there is probably a way to generalise this -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d ../rviz/turtlebot3_fake.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/broomstick/turtlebot3_rosserial_simulation/turtlebot3_simulations/turtlebot3_rosserial/rviz/turtlebot3_fake.rviz"/>
 </launch>

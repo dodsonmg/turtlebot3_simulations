@@ -88,7 +88,6 @@ bool init(std::string host_ip)
 *******************************************************************************/
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 {
-  printf("In commandVelocityCallback\n");
   last_cmd_vel_time = rosNow();
 
   goal_linear_velocity  = cmd_vel_msg.linear.x;
@@ -461,8 +460,12 @@ int main(int argc, char* argv[])
     update();
     spin_result=nh.spinOnce();  // from opencr
 
+    if(count%10 == 0)
+    {
+      printf("Loop count: %d\n", count);
+    }
     count++;
-    // sleep(1./30.);  // original turtlebot sim has an operating frequency of 30
+
     sleep(loop_rate);
   }
 
