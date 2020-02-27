@@ -32,13 +32,12 @@
 * mostly copied from opencr setup() function
 *******************************************************************************/
 
-bool init()
+bool init(std::string host_ip)
 {
   // DEBUG_SERIAL.begin(57600);  // not sure how this is used
 
   // Initialize ROS node handle, advertise and subscribe the topics
-  nh.initNode("10.248.105.37");
-  // nh.initNode("128.232.65.230");
+  nh.initNode((char *)host_ip.c_str());
 //   nh.getHardware()->setBaud(115200);
 
   nh.subscribe(cmd_vel_sub);
@@ -455,7 +454,7 @@ int main(int argc, char* argv[])
   int spin_result;
   // ros::init(argc, argv, "turtlebot3_fake_node");
   // Turtlebot3Fake tb3fake;
-  init();
+  init(host_ip);
 
   while (1)
   {
