@@ -18,6 +18,7 @@ if [[ "$TARGET" == "ubuntu" ]]; then
 		-I./turtlebot3_rosserial/include/turtlebot3_rosserial
 elif [[ "$TARGET" == "cheri" ]]; then
 	$HOME/cheri/output/sdk/bin/cheri-unknown-freebsd-clang++ $IN -o $OUT \
+		-mabi=purecap \
 		-I../rosserial_cheribsd/ros_lib \
 		-I./turtlebot3_rosserial/include \
 		-I./turtlebot3_rosserial/include/turtlebot3_rosserial \
