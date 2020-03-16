@@ -17,13 +17,9 @@
 /* Authors: Yoonseok Pyo */
 
 /*******************************************************************************
- * Types of changes to map turtlebot3_core.cpp to this file:
- * - assume the turtlebot model is 'burger'
- * - remove treatment of Turtlebot3Fake as a class
- * - remove all the Turtlebot3Fake:: scoping
+ * Modified by Michael Dodson, 2020
 *******************************************************************************/
 
-// #include <turtlebot3_fake/turtlebot3_fake.h>
 #include "turtlebot3_rosserial.h"
 
 /*******************************************************************************

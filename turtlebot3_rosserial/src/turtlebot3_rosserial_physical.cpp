@@ -17,13 +17,9 @@
 /* Authors: Yoonseok Pyo */
 
 /*******************************************************************************
- * Types of changes to map turtlebot3_core.cpp to this file:
- * - assume the turtlebot model is 'burger'
- * - remove treatment of Turtlebot3Fake as a class
- * - remove all the Turtlebot3Fake:: scoping
+ * Modified by Michael Dodson, 2020
 *******************************************************************************/
 
-// #include <turtlebot3_fake/turtlebot3_fake.h>
 #include "turtlebot3_rosserial.h"
 #include "simulation_parameters.h"
 
@@ -182,7 +178,7 @@ void initJointStates(void)
   joint_states.name_length     = WHEEL_NUM;
   joint_states.position_length = WHEEL_NUM;
   joint_states.velocity_length = WHEEL_NUM;
-  joint_states.effort_length   = 0;  // possibly used by opencr? set to 0 or else serialisation crashes
+  joint_states.effort_length   = 0;
 }
 
 /*******************************************************************************
@@ -223,9 +219,6 @@ bool updatePhysical()
 {
   ros::Time time_now = rosNow();
 
-  // i don't really understand what this is for, but seems necessary for robot_state_publisher and rviz
-  // updateTFPrefix(nh.connected());
-
   // this is a bit odd, but in rosserial Time and Duration don't have a - operator
   // so i have to convert a Time to seconds (a double), subtract, then convert to a Duration
   ros::Duration step_time;
@@ -242,19 +235,14 @@ bool updatePhysical()
   // odom
   updateOdometry(step_time);
   odom.header.stamp = time_now;
-  // odom_pub.publish(&odom);
 
   // joint_states
   updateJointStates();
   joint_states.header.stamp = time_now;
-  // joint_states_pub.publish(&joint_states);
 
   // tf
   updateTF(odom_tf);
-  // tf_broadcaster.sendTransform(odom_tf);
-
-  // sendLogMsg();
-
+  
   return true;
 }
 

@@ -35,14 +35,8 @@
 #include <math.h>
 #include <unistd.h> // supports sleep function
 
-/* ros/ros.h is a file full of local includes and is conceptually
-different from the one used by opencr.
+#include <ros.h>
 
-commenting it out until we decide we need it. */
-// #include <ros/ros.h>
-#include <ros.h>  // from opencr
-
-/* all of these are included in the opencr repo */
 #include <ros/time.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Empty.h>
@@ -64,8 +58,7 @@ commenting it out until we decide we need it. */
 /*******************************************************************************
 * TurtleBot3 Burger Parameters
 *******************************************************************************/
-/* these are very similar to the definitions in turtlebot3_core_config.h:46-70 */
-#define NAME "Burger"  // not sure if NAME is defined elsewhere
+#define NAME "Burger"
 #define FIRMWARE_VER "1.2.3"
 
 #define WHEEL_RADIUS                    0.033     // meter
@@ -106,17 +99,17 @@ bool updateComms(void);
 int spinComms(void);
 void sendLogMsg(void);
 
-void initOdom(void);  //copied from opencr
-void initJointStates(void);  // copied from opencr
+void initOdom(void);
+void initJointStates(void);
 
 bool updateOdometry(ros::Duration diff_time);  // arguments are void in opencr
 void updateTF(geometry_msgs::TransformStamped& odom_tf);
 void updateTFPrefix(bool isConnected);
 void updateJointStates(void);
 
-void publishVersionInfoMsg(void);  // copied from opencr
+void publishVersionInfoMsg(void);
 
-ros::Time rosNow(void);  // from opencr
+ros::Time rosNow(void);
 
 char* getOdomHeaderFrameId(void);
 char* getOdomChildFrameId(void);
@@ -125,17 +118,5 @@ sensor_msgs::JointState* getJointStates(void);
 nav_msgs::Odometry* getOdom(void);
 turtlebot3_msgs::VersionInfo* getVersionInfoMsg(void);
 geometry_msgs::TransformStamped& getOdomTf(void);
-
-/* The goal was to take this simulation (turtlebot3_fake) and map as much of the
-opencr code (turtlebot3_core) to the header and cpp files so it can be compiled
-using rosserial.
-
-As a result, I removed the class definition and tried to make the file structure
-match that of opencr turtlebot3_core.h.  This included a few instances of changing
-arguments, presumably because the rosserial use of a function is different.
-
-E.g., commandVelocityCallback receives TwistConstPtr cmd_vel_msg in turtlebot3_fake
-and it receives Twist& cmd_vel_msg in turtlebot3_core.
-*/
 
 #endif // TURTLEBOT3_FAKE_ROSSERIAL_H_
