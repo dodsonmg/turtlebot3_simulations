@@ -128,9 +128,12 @@ void sendLogMsg(void)
 
   std::string name             = NAME;
   std::string firmware_version = FIRMWARE_VER;
-  std::string bringup_log      = "This core(v" + firmware_version + ") is compatible with TB3 " + name;
+  std::string git_branch       = GIT_BRANCH;
+  std::string name_data        = "TB3:\t" + name;
+  std::string fw_data          = "FW:\t\t" + firmware_version;
+  std::string git_data         = "Git branch:\t" + git_branch;
    
-  const char* init_log_data = bringup_log.c_str();
+  // const char* init_log_data = bringup_log.c_str();
 
   if (nh.connected())
   {
@@ -142,7 +145,13 @@ void sendLogMsg(void)
       sprintf(log_msg, "Connected to Simulation!");
       nh.loginfo(log_msg);
 
-      sprintf(log_msg, "%s", init_log_data);
+      sprintf(log_msg, "%s", name_data.c_str());
+      nh.loginfo(log_msg);
+
+      sprintf(log_msg, "%s", fw_data.c_str());
+      nh.loginfo(log_msg);
+
+      sprintf(log_msg, "%s", git_data.c_str());
       nh.loginfo(log_msg);
 
       sprintf(log_msg, "--------------------------");
