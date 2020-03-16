@@ -46,6 +46,8 @@ int main(int argc, char* argv[])
     return 1;
   }
 
+  printf("In main()\n");
+
   int count = 0;
   int spin_result;
 

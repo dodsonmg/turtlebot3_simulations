@@ -1,1 +1,7 @@
 .vscode
+libturtlebot3_rosserial_comms_cheri.so
+libturtlebot3_rosserial_comms_ubuntu.so
+libturtlebot3_rosserial_physical_cheri.so
+libturtlebot3_rosserial_physical_ubuntu.so
+turtlebot3_rosserial_ubuntu
+turtlebot3_rosserial_cheri

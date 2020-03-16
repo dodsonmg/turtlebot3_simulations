@@ -60,7 +60,7 @@
 *******************************************************************************/
 #define NAME "Burger"
 #define FIRMWARE_VER "1.2.3"
-#define GIT_BRANCH "cheri_compartments"
+#define GIT_BRANCH "so_files"
 
 #define WHEEL_RADIUS                    0.033     // meter
 
