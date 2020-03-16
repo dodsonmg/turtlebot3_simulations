@@ -1,5 +1,5 @@
 #!/bin/bash
 
-INPUT=$1
+INPUT=turtlebot3_rosserial_cheri
 
 cp $INPUT $HOME/cheri/output/rootfs128/xfer
