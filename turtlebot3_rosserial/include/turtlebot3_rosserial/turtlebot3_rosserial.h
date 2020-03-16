@@ -29,8 +29,8 @@
  * Modifier:  Michael Dodson
  ********************************************************************************/
 
-#ifndef TURTLEBOT3_FAKE_ROSSERIAL_H_
-#define TURTLEBOT3_FAKE_ROSSERIAL_H_
+#ifndef TURTLEBOT3_ROSSERIAL_H_
+#define TURTLEBOT3_ROSSERIAL_H_
 
 #include <math.h>
 #include <unistd.h> // supports sleep function
@@ -120,4 +120,4 @@ nav_msgs::Odometry* getOdom(void);
 turtlebot3_msgs::VersionInfo* getVersionInfoMsg(void);
 geometry_msgs::TransformStamped& getOdomTf(void);
 
-#endif // TURTLEBOT3_FAKE_ROSSERIAL_H_
+#endif // TURTLEBOT3_ROSSERIAL_H_
