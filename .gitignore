@@ -1,3 +1,5 @@
-# don't include the executables in the repo
-turtlebot3_rosserial_cheri
-turtlebot3_rosserial_ubuntu
+.vscode
+./turtlebot3_rosserial/lib/libturtlebot3_rosserial_comms.so
+./turtlebot3_rosserial/lib/libturtlebot3_rosserial_physical.so
+./turtlebot3_rosserial/bin/turtlebot3_rosserial_ubuntu
+./turtlebot3_rosserial/bin/turtlebot3_rosserial_cheri
