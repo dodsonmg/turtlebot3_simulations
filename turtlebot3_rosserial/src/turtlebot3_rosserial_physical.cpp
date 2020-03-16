@@ -25,60 +25,39 @@
 
 // #include <turtlebot3_fake/turtlebot3_fake.h>
 #include "turtlebot3_rosserial.h"
+#include "simulation_parameters.h"
+
+/*******************************************************************************
+* Global variables
+*******************************************************************************/
+
+// ROS Time
+ros::Time last_cmd_vel_time;
+ros::Time prev_update_time;
+
+// Joint(Dynamixel) state of Turtlebot3
+sensor_msgs::JointState joint_states;
+
+// Odometry of Turtlebot3
+nav_msgs::Odometry odom;
+
+// Version information of Turtlebot3
+turtlebot3_msgs::VersionInfo version_info_msg;
+
+// TF of Turtlebot3
+geometry_msgs::TransformStamped odom_tf;
 
 /*******************************************************************************
 * [New] Init function
-*
-* mostly copied from opencr setup() function
 *******************************************************************************/
-
-bool init(std::string host_ip)
+bool initPhysical()
 {
-  // DEBUG_SERIAL.begin(57600);  // not sure how this is used
-
-  // Initialize ROS node handle, advertise and subscribe the topics
-  nh.initNode((char *)host_ip.c_str());
-//   nh.getHardware()->setBaud(115200);
-
-  nh.subscribe(cmd_vel_sub);
-  // nh.subscribe(sound_sub);
-  // nh.subscribe(motor_power_sub);
-//   nh.subscribe(reset_sub);
-
-  // nh.advertise(sensor_state_pub);  
-  nh.advertise(version_info_pub);
-  // nh.advertise(imu_pub);
-  // nh.advertise(cmd_vel_rc100_pub);
-  nh.advertise(odom_pub);
-  nh.advertise(joint_states_pub);
-  // nh.advertise(battery_state_pub);
-  // nh.advertise(mag_pub);
-
-  tf_broadcaster.init(nh);
-
-  // Setting for Dynamixel motors
-  // motor_driver.init(NAME);
-
-  // Setting for IMU
-  // sensors.init();
-
-  // Init diagnosis
-  // diagnosis.init();
-
-  // Setting for ROBOTIS RC100 remote controller and cmd_vel
-  // controllers.init(MAX_LINEAR_VELOCITY, MAX_ANGULAR_VELOCITY);
-
   // Setting for SLAM and navigation (odometry, joint states, TF)
   initOdom();
 
   initJointStates();
 
-  // prev_update_time = millis();  // this returns ticks since the board started
   prev_update_time = rosNow();
-
-  // pinMode(LED_WORKING_CHECK, OUTPUT);
-
-  // setup_end = true;
 
   return true;
 }
@@ -98,23 +77,7 @@ void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg)
 }
 
 /*******************************************************************************
-* Publish msgs (version info)
-*
-* copied from opencr
-*******************************************************************************/
-void publishVersionInfoMsg(void)
-{
-  version_info_msg.hardware = "0.0.0";
-  version_info_msg.software = "0.0.0";
-  version_info_msg.firmware = FIRMWARE_VER;
-
-  version_info_pub.publish(&version_info_msg);
-}
-
-/*******************************************************************************
 * Initialization odometry data
-*
-* copied from opencr
 *******************************************************************************/
 void initOdom(void)
 {
@@ -191,8 +154,8 @@ bool updateOdometry(ros::Duration diff_time)
   odom_vel[2] = delta_theta / diff_time.toSec(); // w
 
   // i think these are necessary for robot_state_publisher and rviz
-  odom.header.frame_id = odom_header_frame_id;
-  odom.child_frame_id  = odom_child_frame_id;
+  odom.header.frame_id = getOdomHeaderFrameId();
+  odom.child_frame_id  = getOdomChildFrameId();
 
   odom.pose.pose.position.x = odom_pose[0];
   odom.pose.pose.position.y = odom_pose[1];
@@ -208,14 +171,12 @@ bool updateOdometry(ros::Duration diff_time)
 
 /*******************************************************************************
 * Initialization joint states data
-*
-* copied from opencr
 *******************************************************************************/
 void initJointStates(void)
 {
   static char *joint_states_name[] = {(char*)"wheel_left_joint", (char*)"wheel_right_joint"};
 
-//   joint_states.header.frame_id = joint_state_header_frame_id;  // opencr.  this never gets set
+//   joint_states.header.frame_id = joint_state_header_frame_id;  // opencr.  this never gets used
   joint_states.name            = joint_states_name;
 
   joint_states.name_length     = WHEEL_NUM;
@@ -243,67 +204,6 @@ void updateJointStates(void)
 }
 
 /*******************************************************************************
-* Update TF Prefix
-*******************************************************************************/
-void updateTFPrefix(bool isConnected)
-{
-  static bool isChecked = false;
-  char log_msg[50];
-
-  if (isConnected)
-  {
-    if (isChecked == false)
-    {
-      nh.getParam("~tf_prefix", &get_tf_prefix);
-
-      if (!strcmp(get_tf_prefix, ""))
-      {
-        sprintf(odom_header_frame_id, "odom");
-        sprintf(odom_child_frame_id, "base_footprint");  
-
-        // sprintf(imu_frame_id, "imu_link");
-        // sprintf(mag_frame_id, "mag_link");
-        sprintf(joint_state_header_frame_id, "base_link");
-      }
-      else
-      {
-        strcpy(odom_header_frame_id, get_tf_prefix);
-        strcpy(odom_child_frame_id, get_tf_prefix);
-
-        // strcpy(imu_frame_id, get_tf_prefix);
-        // strcpy(mag_frame_id, get_tf_prefix);
-        strcpy(joint_state_header_frame_id, get_tf_prefix);
-
-        strcat(odom_header_frame_id, "/odom");
-        strcat(odom_child_frame_id, "/base_footprint");
-
-        // strcat(imu_frame_id, "/imu_link");
-        // strcat(mag_frame_id, "/mag_link");
-        strcat(joint_state_header_frame_id, "/base_link");
-      }
-
-      sprintf(log_msg, "Setup TF on Odometry [%s]", odom_header_frame_id);
-      nh.loginfo(log_msg); 
-
-      // sprintf(log_msg, "Setup TF on IMU [%s]", imu_frame_id);
-      // nh.loginfo(log_msg); 
-
-      // sprintf(log_msg, "Setup TF on MagneticField [%s]", mag_frame_id);
-      // nh.loginfo(log_msg); 
-
-      sprintf(log_msg, "Setup TF on JointState [%s]", joint_state_header_frame_id);
-      nh.loginfo(log_msg); 
-
-      isChecked = true;
-    }
-  }
-  else
-  {
-    isChecked = false;
-  }
-}
-
-/*******************************************************************************
 * Calculate the TF
 *******************************************************************************/
 void updateTF(geometry_msgs::TransformStamped& odom_tf)
@@ -317,81 +217,14 @@ void updateTF(geometry_msgs::TransformStamped& odom_tf)
 }
 
 /*******************************************************************************
-* Send log message
-*
-* copied from opencr
-*******************************************************************************/
-void sendLogMsg(void)
-{
-  static bool log_flag = false;
-  char log_msg[100];  
-
-  std::string name             = NAME;
-  std::string firmware_version = FIRMWARE_VER;
-  std::string bringup_log      = "This core(v" + firmware_version + ") is compatible with TB3 " + name;
-   
-  const char* init_log_data = bringup_log.c_str();
-
-  if (nh.connected())
-  {
-    if (log_flag == false)
-    {      
-      sprintf(log_msg, "--------------------------");
-      nh.loginfo(log_msg);
-
-      sprintf(log_msg, "Connected to Simulation!");
-      nh.loginfo(log_msg);
-
-      sprintf(log_msg, init_log_data);
-      nh.loginfo(log_msg);
-
-      sprintf(log_msg, "--------------------------");
-      nh.loginfo(log_msg);
-
-      log_flag = true;
-    }
-  }
-  else
-  {
-    log_flag = false;
-  }
-}
-
-/*******************************************************************************
-* ros::Time::now() implementation
-*
-* copied from opencr
-*******************************************************************************/
-ros::Time rosNow()
-{
-  return nh.now();
-}
-
-/*******************************************************************************
-* Time Interpolation function (deprecated)
-*
-* copied from opencr
-* not sure if this is used...
-*******************************************************************************/
-ros::Time addMicros(ros::Time & t, uint32_t _micros)
-{
-  uint32_t sec, nsec;
-
-  sec  = _micros / 1000 + t.sec;
-  nsec = _micros % 1000000000 + t.nsec;
-
-  return ros::Time(sec, nsec);
-}
-
-/*******************************************************************************
 * Update function
 *******************************************************************************/
-bool update()
+bool updatePhysical()
 {
   ros::Time time_now = rosNow();
 
   // i don't really understand what this is for, but seems necessary for robot_state_publisher and rviz
-  updateTFPrefix(nh.connected());
+  // updateTFPrefix(nh.connected());
 
   // this is a bit odd, but in rosserial Time and Duration don't have a - operator
   // so i have to convert a Time to seconds (a double), subtract, then convert to a Duration
@@ -409,21 +242,48 @@ bool update()
   // odom
   updateOdometry(step_time);
   odom.header.stamp = time_now;
-  odom_pub.publish(&odom);
+  // odom_pub.publish(&odom);
 
   // joint_states
   updateJointStates();
   joint_states.header.stamp = time_now;
-  joint_states_pub.publish(&joint_states);
+  // joint_states_pub.publish(&joint_states);
 
   // tf
-  // geometry_msgs::TransformStamped odom_tf;  // moved to header file
   updateTF(odom_tf);
-  tf_broadcaster.sendTransform(odom_tf);
+  // tf_broadcaster.sendTransform(odom_tf);
 
-  sendLogMsg();
+  // sendLogMsg();
 
   return true;
+}
+
+/*******************************************************************************
+* Access functions
+*******************************************************************************/
+// Joint(Dynamixel) state of Turtlebot3
+sensor_msgs::JointState* getJointStates(void)
+{
+  return &joint_states;
+}
+
+// Odometry of Turtlebot3
+nav_msgs::Odometry* getOdom(void)
+{
+  return &odom;
+}
+
+// Version information of Turtlebot3
+turtlebot3_msgs::VersionInfo* getVersionInfoMsg(void)
+{
+  return &version_info_msg;
+}
+
+// TF of Turtlebot3
+// unlike the other publishers, tf broadcaster takes a reference, not a pointer, as input, I think.
+geometry_msgs::TransformStamped& getOdomTf(void)
+{
+  return odom_tf;
 }
 
 /*******************************************************************************
@@ -451,14 +311,16 @@ int main(int argc, char* argv[])
 
   int count = 0;
   int spin_result;
-  // ros::init(argc, argv, "turtlebot3_fake_node");
-  // Turtlebot3Fake tb3fake;
-  init(host_ip);
+
+  initPhysical();
+  initComms(host_ip);
 
   while (1)
   {
-    update();
-    spin_result=nh.spinOnce();  // from opencr
+    updatePhysical();
+    updateComms();
+
+    spin_result=spinComms();
 
     if(count%10 == 0)
     {
