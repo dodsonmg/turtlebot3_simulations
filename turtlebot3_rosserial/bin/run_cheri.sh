@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/csh
 
-export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+setenv LD_CHERI_LIBRARY_PATH /rootfs/xfer
 ./turtlebot3_rosserial_cheri
