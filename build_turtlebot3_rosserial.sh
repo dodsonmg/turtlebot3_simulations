@@ -7,17 +7,22 @@ else
 	TARGET=$1
 fi
 
-IN=./turtlebot3_rosserial/src/turtlebot3_rosserial.cpp
+IN_PHYSICAL=./turtlebot3_rosserial/src/turtlebot3_rosserial_physical.cpp
+IN_COMMS=./turtlebot3_rosserial/src/turtlebot3_rosserial_comms.cpp
+TIME=../rosserial_cheribsd/ros_lib/time.cpp
+DURATION=../rosserial_cheribsd/ros_lib/duration.cpp
+EMBEDDED_LINUX_COMMS=../rosserial_cheribsd/ros_lib/embedded_linux_comms.c
+
 OUT=turtlebot3_rosserial_$TARGET
 
 if [[ "$TARGET" == "ubuntu" ]]; then
-	g++ $IN -o $OUT \
+	g++ $IN_PHYSICAL $IN_COMMS $TIME $DURATION $EMBEDDED_LINUX_COMMS -o $OUT \
 		-g \
 		-I../rosserial_cheribsd/ros_lib \
 		-I./turtlebot3_rosserial/include \
 		-I./turtlebot3_rosserial/include/turtlebot3_rosserial
 elif [[ "$TARGET" == "cheri" ]]; then
-	$HOME/cheri/output/sdk/bin/cheri-unknown-freebsd-clang++ $IN -o $OUT \
+	$HOME/cheri/output/sdk/bin/cheri-unknown-freebsd-clang++ $IN_PHYSICAL $IN_COMMS -o $OUT \
 		-mabi=purecap \
 		-I../rosserial_cheribsd/ros_lib \
 		-I./turtlebot3_rosserial/include \
