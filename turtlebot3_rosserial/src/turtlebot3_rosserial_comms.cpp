@@ -48,6 +48,9 @@ ros::Publisher version_info_pub("firmware_version", getVersionInfoMsg());
 ros::Publisher joint_states_pub("joint_states", getJointStates());
 tf::TransformBroadcaster tf_broadcaster;
 
+// Subscribers
+ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", commandVelocityCallback);
+
 /*******************************************************************************
 * [New] Init function
 *******************************************************************************/
@@ -56,7 +59,6 @@ bool initComms(std::string host_ip)
   // Initialize ROS node handle, advertise and subscribe the topics
   nh.initNode((char *)host_ip.c_str());
 
-  ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", commandVelocityCallback);
   nh.subscribe(cmd_vel_sub);
 
   nh.advertise(version_info_pub);
@@ -81,11 +83,9 @@ bool updateComms(void)
   updateTFPrefix(nh.connected());
 
   // odom
-  // odom_pub.publish(&odom);
   odom_pub.publish(getOdom());
 
   // joint_states
-  // joint_states_pub.publish(&joint_states);
   joint_states_pub.publish(getJointStates());
 
   // tf
