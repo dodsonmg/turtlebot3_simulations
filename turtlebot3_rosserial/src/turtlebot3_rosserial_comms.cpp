@@ -142,7 +142,7 @@ void sendLogMsg(void)
       sprintf(log_msg, "Connected to Simulation!");
       nh.loginfo(log_msg);
 
-      sprintf(log_msg, init_log_data);
+      sprintf(log_msg, "%s", init_log_data);
       nh.loginfo(log_msg);
 
       sprintf(log_msg, "--------------------------");
