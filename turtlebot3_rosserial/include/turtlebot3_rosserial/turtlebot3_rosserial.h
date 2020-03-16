@@ -33,6 +33,7 @@
 #define TURTLEBOT3_FAKE_ROSSERIAL_H_
 
 #include <math.h>
+#include <unistd.h> // supports sleep function
 
 /* ros/ros.h is a file full of local includes and is conceptually
 different from the one used by opencr.
@@ -60,22 +61,9 @@ commenting it out until we decide we need it. */
 #include <turtlebot3_msgs/Sound.h>
 #include <turtlebot3_msgs/VersionInfo.h>
 
-/* from opencr, TurtleBot3.h includes several other header files that define:
-turtlebot3_motor_driver.h
-turtlebot3_sensor.h
-turtlebot3_controller.h
-turtlebot3_diagnosis.h */
-
-// #include <TurtleBot3.h>
-
-// #include "turtlebot3_burger.h"  // from opencr.  unnecessary because all these things are defined in this file
-
-
-/* not sure what this is doing in the original file from
-turtlebot3_simulations repo.  seems to be self-referential.
-leaving it here for now. */
-// #include "turtlebot3_fake.h"
-
+/*******************************************************************************
+* TurtleBot3 Burger Parameters
+*******************************************************************************/
 /* these are very similar to the definitions in turtlebot3_core_config.h:46-70 */
 #define NAME "Burger"  // not sure if NAME is defined elsewhere
 #define FIRMWARE_VER "1.2.3"
@@ -100,17 +88,24 @@ leaving it here for now. */
 #define TORQUE_ENABLE                   1       // Value for enabling the torque of motor
 #define TORQUE_DISABLE                  0       // Value for disabling the torque of motor
 
-
 /*******************************************************************************
 * Callback function prototypes
 *******************************************************************************/
-//void commandVelocityCallback(const geometry_msgs::TwistConstPtr cmd_vel_msg);
 /* from opencr */
 void commandVelocityCallback(const geometry_msgs::Twist& cmd_vel_msg);
 
 /*******************************************************************************
 * Function prototypes
 *******************************************************************************/
+bool initPhysical(void);
+bool initComms(std::string host_ip);
+
+bool updatePhysical(void);
+bool updateComms(void);
+
+int spinComms(void);
+void sendLogMsg(void);
+
 void initOdom(void);  //copied from opencr
 void initJointStates(void);  // copied from opencr
 
@@ -119,126 +114,17 @@ void updateTF(geometry_msgs::TransformStamped& odom_tf);
 void updateTFPrefix(bool isConnected);
 void updateJointStates(void);
 
-// void resetCallback(const std_msgs::Empty& reset_msg);  // copied from opencr
-
 void publishVersionInfoMsg(void);  // copied from opencr
 
 ros::Time rosNow(void);  // from opencr
-ros::Time addMicros(ros::Time & t, uint32_t _micros); // from opencr // deprecated
 
-/*******************************************************************************
-* ROS NodeHandle
-*******************************************************************************/
-ros::NodeHandle nh;
-ros::NodeHandle nh_priv;
+char* getOdomHeaderFrameId(void);
+char* getOdomChildFrameId(void);
 
-/*******************************************************************************
-* ROS Time
-*******************************************************************************/
-ros::Time last_cmd_vel_time;
-ros::Time prev_update_time;
-
-/*******************************************************************************
-* ROS Parameter
-*******************************************************************************/
-char get_prefix[10];
-char* get_tf_prefix = get_prefix;
-
-char odom_header_frame_id[30];
-char odom_child_frame_id[30];
-
-char imu_frame_id[30];
-char mag_frame_id[30];
-
-char joint_state_header_frame_id[30];
-
-/*******************************************************************************
-* Subscriber
-*******************************************************************************/
-// ros::Subscriber cmd_vel_sub;
-
-/* from opencr */
-ros::Subscriber<geometry_msgs::Twist> cmd_vel_sub("cmd_vel", commandVelocityCallback);
-
-/* from opencr */
-// ros::Subscriber<std_msgs::Empty> reset_sub("reset", resetCallback);
-
-/*******************************************************************************
-* Publisher
-*******************************************************************************/
-// ros::Publisher joint_states_pub;
-// ros::Publisher odom_pub;
-
-// Joint(Dynamixel) state of Turtlebot3
-/* from opencr */
-sensor_msgs::JointState joint_states;
-ros::Publisher joint_states_pub("joint_states", &joint_states);
-
-// Odometry of Turtlebot3
-/* from opencr */
-nav_msgs::Odometry odom;
-ros::Publisher odom_pub("odom", &odom);
-
-// Version information of Turtlebot3
-/* from opencr */
-turtlebot3_msgs::VersionInfo version_info_msg;
-ros::Publisher version_info_pub("firmware_version", &version_info_msg);
-
-/*******************************************************************************
-* Transform Broadcaster
-*******************************************************************************/
-// tf::TransformBroadcaster tf_broadcaster;
-
-// TF of Turtlebot3
-/* from opencr */
-geometry_msgs::TransformStamped odom_tf;
-tf::TransformBroadcaster tf_broadcaster;
-
-/*******************************************************************************
-* Simulation Parameters
-*******************************************************************************/
-double wheel_speed_cmd[WHEEL_NUM] = {0.0, 0.0};
-double goal_linear_velocity  = 0.0;
-double goal_angular_velocity = 0.0;
-
-double loop_rate             = 1.;     // for turtlebot3 sim, this is originally 30Hz (1./30.)
-double cmd_vel_timeout       = 10.0;    // for turtlebot3 sim, this is originally 1.0
-
-float  odom_pose[3];
-float  odom_vel[3];
-
-/*
-???:  this doesn't appear to be used.  
-pcov was in the .cpp file, and I moved it below.
-*/
-// double pose_cov[36];
-
-/*
-???:  why is this necessary?
-used to set node params, which i removed.
-push_back'ed into joint_states.name in .cpp
-*/
-std::string joint_states_name[2];
-
-double last_position[WHEEL_NUM] = {0.0, 0.0};
-double last_velocity[WHEEL_NUM] = {0.0, 0.0};
-
-// assume TurtleBot3 Burger
-double wheel_separation       = 0.287;
-double turning_radius         = 0.1435;
-double robot_radius           = 0.220;
-
-/*
-???:  this is not performed in opencr
-
-moved the memcpy lines to the .cpp file
-*/
-double pcov[36] = { 0.1,   0,   0,   0,   0, 0,
-                      0, 0.1,   0,   0,   0, 0,
-                      0,   0, 1e6,   0,   0, 0,
-                      0,   0,   0, 1e6,   0, 0,
-                      0,   0,   0,   0, 1e6, 0,
-                      0,   0,   0,   0,   0, 0.2};
+sensor_msgs::JointState* getJointStates(void);
+nav_msgs::Odometry* getOdom(void);
+turtlebot3_msgs::VersionInfo* getVersionInfoMsg(void);
+geometry_msgs::TransformStamped& getOdomTf(void);
 
 /* The goal was to take this simulation (turtlebot3_fake) and map as much of the
 opencr code (turtlebot3_core) to the header and cpp files so it can be compiled
